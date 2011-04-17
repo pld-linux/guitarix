@@ -2,7 +2,7 @@ Summary:	Linux Rock Guitar Amplifier for Jack Audio Connektion Kit
 #Summary(pl.UTF-8):	-
 Name:		guitarix
 Version:	0.11.1
-Release:	0.1
+Release:	1
 License:	GPL v2
 Group:		Applications/Multimedia
 Source0:	http://dl.sourceforge.net/guitarix/%{name}-%{version}.tar.bz2
