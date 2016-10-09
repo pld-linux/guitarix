@@ -1,22 +1,36 @@
+
+# TODO:
+#	- package the roboto font separately
+
 Summary:	Linux Rock Guitar Amplifier for Jack Audio Connektion Kit
-#Summary(pl.UTF-8):	-
 Name:		guitarix
-Version:	0.11.1
+Version:	0.35.1
 Release:	1
-License:	GPL v2
+License:	GPL v2+, GPL v3+ (abgate plugin), Apache (font)
 Group:		Applications/Multimedia
-Source0:	http://dl.sourceforge.net/guitarix/%{name}-%{version}.tar.bz2
-# Source0-md5:	1c95a67c0788d6ffe609e430d4b57169
+Source0:	http://downloads.sourceforge.net/guitarix/%{name}2-%{version}.tar.xz
+# Source0-md5:	fb7269fe6fdde4c493be65f974819bb4
 URL:		http://guitarix.sourceforge.net/
-BuildRequires:	ladspa-devel
-BuildRequires:	jack-audio-connection-kit-devel
-BuildRequires:	libsndfile-devel >= 1.0.17
-BuildRequires:	gtk+2-devel
-BuildRequires:	glib2-devel
-BuildRequires:	gtkmm-devel
-BuildRequires:	glibmm-devel
+BuildRequires:	avahi-gobject-devel
+BuildRequires:	bluez-libs-devel
+BuildRequires:	boost-devel >= 1.38
+BuildRequires:	eigen3
 BuildRequires:	fftw3-devel >= 3.1.2
-BuildRequires:	boost-devel
+BuildRequires:	gettext-tools
+BuildRequires:	glib2-devel
+BuildRequires:	glibmm-devel >= 2.24.0
+BuildRequires:	gperf
+BuildRequires:	gtk+2-devel >= 1:2.12.0
+BuildRequires:	gtkmm-devel >= 2.12.0
+BuildRequires:	intltool
+BuildRequires:	jack-audio-connection-kit-devel > 0.109.1
+BuildRequires:	ladspa-devel
+BuildRequires:	liblrdf-devel
+BuildRequires:	libsndfile-devel >= 1.0.17
+BuildRequires:	lilv-devel
+BuildRequires:	zita-convolver-devel
+BuildRequires:	zita-resampler-devel
+Requires(post,postun):	fontpostinst
 Requires:	ladspa
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -30,33 +44,61 @@ freeverb, impulse response, vibrato, chorus, delay, crybaby(wah),
 ampselector, tonestack, and echo. For 'pressure' in the sound you can
 use the feedback and feedforward sliders.
 
-#%description -l pl.UTF-8
 
 %prep
 %setup -q
 
 %build
 ./waf configure \
+	--cxxflags-release="%{rpmcflags} -DNDEBUG" \
 	--prefix=%{_prefix} \
-	--ladspadir=%{_libdir}/ladspa
+	--libdir=%{_libdir} \
+	--ladspadir=%{_libdir}/ladspa \
+	--install-roboto-font
 
 ./waf build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
+install -d $RPM_BUILD_ROOT%{_fontsdir}/TTF
+
 ./waf install \
 	--destdir=$RPM_BUILD_ROOT
+
+rm -f $RPM_BUILD_ROOT%{_datadir}/fonts/truetype/robotocondensed/LICENSE.txt
+
+rm -f $RPM_BUILD_ROOT%{_libdir}/*.so
+
+mv $RPM_BUILD_ROOT%{_datadir}/fonts/truetype/robotocondensed/*.ttf $RPM_BUILD_ROOT%{_fontsdir}/TTF/
+
+%find_lang %{name}
+
+%post
+fontpostinst TTF
+/sbin/ldconfig
+
+%postun
+fontpostinst TTF
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc changelog README*
 %attr(755,root,root) %{_bindir}/guitarix
+%attr(755,root,root) %{_libdir}/libgxw.so.0.*
+%attr(755,root,root) %ghost %{_libdir}/libgxw.so.0
+%attr(755,root,root) %{_libdir}/libgxwmm.so.0.*
+%attr(755,root,root) %ghost %{_libdir}/libgxwmm.so.0
 %attr(755,root,root) %{_libdir}/ladspa/*.so
+%{_datadir}/ladspa/rdf/*.rdf
+%dir %{_libdir}/lv2/gx*
+%attr(755,root,root) %{_libdir}/lv2/gx*/*.so
+%{_libdir}/lv2/gx*/*.ttl
+%{_libdir}/lv2/gx*/modgui
 %{_desktopdir}/guitarix.desktop
-%{_datadir}/guitarix
-%{_datadir}/ladspa/rdf/guitarix.rdf
+%{_datadir}/gx_head
+%{_fontsdir}/TTF/*.ttf
 %{_pixmapsdir}/*.png
