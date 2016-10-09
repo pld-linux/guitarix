@@ -1,12 +1,8 @@
-
-# TODO:
-#	- package the roboto font separately
-
 Summary:	Linux Rock Guitar Amplifier for Jack Audio Connektion Kit
 Name:		guitarix
 Version:	0.35.1
 Release:	1
-License:	GPL v2+, GPL v3+ (abgate plugin), Apache (font)
+License:	GPL v2+, GPL v3+ (abgate plugin)
 Group:		Applications/Multimedia
 Source0:	http://downloads.sourceforge.net/guitarix/%{name}2-%{version}.tar.xz
 # Source0-md5:	fb7269fe6fdde4c493be65f974819bb4
@@ -30,8 +26,8 @@ BuildRequires:	libsndfile-devel >= 1.0.17
 BuildRequires:	lilv-devel
 BuildRequires:	zita-convolver-devel
 BuildRequires:	zita-resampler-devel
-Requires(post,postun):	fontpostinst
 Requires:	ladspa
+Requires:	fonts-TTF-Roboto
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -53,33 +49,22 @@ use the feedback and feedforward sliders.
 	--cxxflags-release="%{rpmcflags} -DNDEBUG" \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
-	--ladspadir=%{_libdir}/ladspa \
-	--install-roboto-font
+	--ladspadir=%{_libdir}/ladspa
 
 ./waf build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT%{_fontsdir}/TTF
-
 ./waf install \
 	--destdir=$RPM_BUILD_ROOT
 
-rm -f $RPM_BUILD_ROOT%{_datadir}/fonts/truetype/robotocondensed/LICENSE.txt
-
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.so
-
-mv $RPM_BUILD_ROOT%{_datadir}/fonts/truetype/robotocondensed/*.ttf $RPM_BUILD_ROOT%{_fontsdir}/TTF/
 
 %find_lang %{name}
 
-%post
-fontpostinst TTF
-/sbin/ldconfig
-
-%postun
-fontpostinst TTF
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -100,5 +85,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/lv2/gx*/modgui
 %{_desktopdir}/guitarix.desktop
 %{_datadir}/gx_head
-%{_fontsdir}/TTF/*.ttf
 %{_pixmapsdir}/*.png
