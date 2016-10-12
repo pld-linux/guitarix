@@ -1,7 +1,7 @@
 Summary:	Linux Rock Guitar Amplifier for Jack Audio Connektion Kit
 Name:		guitarix
 Version:	0.35.1
-Release:	1
+Release:	2
 License:	GPL v2+, GPL v3+ (abgate plugin)
 Group:		Applications/Multimedia
 Source0:	http://downloads.sourceforge.net/guitarix/%{name}2-%{version}.tar.xz
@@ -30,6 +30,8 @@ Requires:	ladspa
 Requires:	fonts-TTF-Roboto
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		_noautoprovfiles	%{_libdir}/(ladspa|lv2)
+
 %description
 Guitarix is a simple Linux Rock Guitar Amplifier for jack (Jack Audio
 Connektion Kit) with one input and two outputs. Designed to get nice
@@ -45,8 +47,13 @@ use the feedback and feedforward sliders.
 %setup -q
 
 %build
+CC="%{__cc}" \
+CXX="%{__cxx}" \
+CFLAGS="%{rpmcflags}" \
+CXXFLAGS="%{rpmcxxflags}" \
+LDFLAGS="%{rpmldflags}" \
 ./waf configure \
-	--cxxflags-release="%{rpmcflags} -DNDEBUG" \
+	--cxxflags-release="-DNDEBUG" \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
 	--ladspadir=%{_libdir}/ladspa
