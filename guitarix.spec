@@ -1,11 +1,11 @@
 Summary:	Linux Rock Guitar Amplifier for Jack Audio Connektion Kit
 Name:		guitarix
-Version:	0.36.1
+Version:	0.37.3
 Release:	1
 License:	GPL v2+, GPL v3+ (abgate plugin)
 Group:		Applications/Multimedia
 Source0:	http://downloads.sourceforge.net/guitarix/%{name}2-%{version}.tar.xz
-# Source0-md5:	1615863a469497f42f1bbec5ebb0d4e1
+# Source0-md5:	78ebc879e5cd7a6e4bd43ff8aec562e1
 URL:		http://guitarix.sourceforge.net/
 BuildRequires:	avahi-gobject-devel
 BuildRequires:	bluez-libs-devel
@@ -24,7 +24,7 @@ BuildRequires:	ladspa-devel
 BuildRequires:	liblrdf-devel
 BuildRequires:	libsndfile-devel >= 1.0.17
 BuildRequires:	lilv-devel
-BuildRequires:	zita-convolver-devel
+BuildRequires:	zita-convolver-devel >= 4.0.0
 BuildRequires:	zita-resampler-devel
 Requires:	ladspa
 Requires:	fonts-TTF-Roboto
@@ -56,7 +56,10 @@ LDFLAGS="%{rpmldflags}" \
 	--cxxflags-release="-DNDEBUG" \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
-	--ladspadir=%{_libdir}/ladspa
+	--ladspadir=%{_libdir}/ladspa \
+	--mod-lv2 \
+	--ladspa \
+	--new-ladspa
 
 ./waf build
 
