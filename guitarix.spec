@@ -1,16 +1,17 @@
 Summary:	Linux Rock Guitar Amplifier for Jack Audio Connektion Kit
 Name:		guitarix
-Version:	0.38.1
-Release:	2
+Version:	0.41.0
+Release:	1
 License:	GPL v2+, GPL v3+ (abgate plugin)
 Group:		Applications/Multimedia
 Source0:	http://downloads.sourceforge.net/guitarix/%{name}2-%{version}.tar.xz
-# Source0-md5:	d9aec810bf164cbf040b298cb9c45d50
-URL:		http://guitarix.sourceforge.net/
+# Source0-md5:	4fd6babdf42881d8b99837647049661f
+URL:		https://guitarix.org/
 BuildRequires:	avahi-gobject-devel
 BuildRequires:	bluez-libs-devel
 BuildRequires:	boost-devel >= 1.38
 BuildRequires:	eigen3
+BuildRequires:	faust
 BuildRequires:	fftw3-devel >= 3.1.2
 BuildRequires:	gettext-tools
 BuildRequires:	glib2-devel
