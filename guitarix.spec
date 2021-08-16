@@ -6,6 +6,7 @@ License:	GPL v2+, GPL v3+ (abgate plugin)
 Group:		Applications/Multimedia
 Source0:	http://downloads.sourceforge.net/guitarix/%{name}2-%{version}.tar.xz
 # Source0-md5:	4fd6babdf42881d8b99837647049661f
+Patch0:		glib2.68.patch
 URL:		https://guitarix.org/
 BuildRequires:	avahi-gobject-devel
 BuildRequires:	bluez-libs-devel
@@ -47,6 +48,7 @@ use the feedback and feedforward sliders.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 CC="%{__cc}" \
