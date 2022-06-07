@@ -1,32 +1,36 @@
 Summary:	Linux Rock Guitar Amplifier for Jack Audio Connektion Kit
 Name:		guitarix
-Version:	0.41.0
-Release:	4
+Version:	0.44.1
+Release:	1
 License:	GPL v2+, GPL v3+ (abgate plugin)
 Group:		Applications/Multimedia
 Source0:	http://downloads.sourceforge.net/guitarix/%{name}2-%{version}.tar.xz
-# Source0-md5:	4fd6babdf42881d8b99837647049661f
-Patch0:		glib2.68.patch
+# Source0-md5:	d1757e08ddc54c4ec07defea6a30ac5b
 URL:		https://guitarix.org/
 BuildRequires:	avahi-gobject-devel
 BuildRequires:	bluez-libs-devel
-BuildRequires:	boost-devel >= 1.38
+BuildRequires:	boost-devel >= 1.42
+BuildRequires:	cairo-devel
+BuildRequires:	curl-devel
 BuildRequires:	eigen3
 BuildRequires:	faust
 BuildRequires:	fftw3-devel >= 3.1.2
+BuildRequires:	fftw3-single-devel
 BuildRequires:	gettext-tools
 BuildRequires:	glib2-devel
 BuildRequires:	glibmm-devel >= 2.24.0
 BuildRequires:	gperf
-BuildRequires:	gtk+2-devel >= 1:2.12.0
-BuildRequires:	gtkmm-devel >= 2.12.0
+BuildRequires:	gtk+3-devel
+BuildRequires:	gtkmm3-devel
 BuildRequires:	intltool
 BuildRequires:	jack-audio-connection-kit-devel > 0.109.1
 BuildRequires:	ladspa-devel
 BuildRequires:	liblrdf-devel
+BuildRequires:	libsigc++-devel
 BuildRequires:	libsndfile-devel >= 1.0.17
 BuildRequires:	lilv-devel
 BuildRequires:	sassc
+BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zita-convolver-devel >= 4.0.0
 BuildRequires:	zita-resampler-devel
 Requires:	ladspa
@@ -48,7 +52,6 @@ use the feedback and feedforward sliders.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 CC="%{__cc}" \
@@ -102,4 +105,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/lv2/gx*/modgui
 %{_desktopdir}/guitarix.desktop
 %{_datadir}/gx_head
+%{_datadir}/metainfo/org.guitarix.guitarix.metainfo.xml
 %{_pixmapsdir}/*.png
