@@ -33,7 +33,9 @@ BuildRequires:	libsigc++-devel
 BuildRequires:	libsndfile-devel >= 1.0.17
 BuildRequires:	lilv-devel
 BuildRequires:	sassc
+BuildRequires:	tar >= 1:1.22
 BuildRequires:	xorg-lib-libX11-devel
+BuildRequires:	xz
 BuildRequires:	zita-convolver-devel >= 4.0.0
 BuildRequires:	zita-resampler-devel
 Requires:	ladspa
