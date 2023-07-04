@@ -1,0 +1,11 @@
+diff -ur guitarix-0.44.1.orig/src/LV2/DSP/gx_common.h guitarix-0.44.1/src/LV2/DSP/gx_common.h
+--- guitarix-0.44.1.orig/src/LV2/DSP/gx_common.h	2022-05-02 20:38:03.000000000 +0200
++++ guitarix-0.44.1/src/LV2/DSP/gx_common.h	2023-07-05 00:27:25.237218722 +0200
+@@ -23,6 +23,7 @@
+ #define SRC_HEADERS_GX_COMMON_H_
+ 
+ 
++#include <cstdint>
+ #include <cstdlib>
+ #include <cmath>
+ #include <iostream>
