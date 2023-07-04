@@ -6,6 +6,7 @@ License:	GPL v2+, GPL v3+ (abgate plugin)
 Group:		Applications/Multimedia
 Source0:	http://downloads.sourceforge.net/guitarix/%{name}2-%{version}.tar.xz
 # Source0-md5:	d1757e08ddc54c4ec07defea6a30ac5b
+Patch0:		zita-resampler-1.10.patch
 URL:		https://guitarix.org/
 BuildRequires:	avahi-gobject-devel
 BuildRequires:	bluez-libs-devel
@@ -52,6 +53,7 @@ use the feedback and feedforward sliders.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 CC="%{__cc}" \

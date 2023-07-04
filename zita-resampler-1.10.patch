@@ -1,0 +1,27 @@
+diff -ur guitarix-0.44.1.orig/waftools/zita-resampler.py guitarix-0.44.1/waftools/zita-resampler.py
+--- guitarix-0.44.1.orig/waftools/zita-resampler.py	2022-05-02 20:38:03.000000000 +0200
++++ guitarix-0.44.1/waftools/zita-resampler.py	2023-07-05 00:19:49.453916836 +0200
+@@ -15,12 +15,21 @@
+     code="""
+     #include <zita-resampler/resampler.h>
+     #include <zita-resampler/resampler-table.h>
+-    #if ZITA_RESAMPLER_MAJOR_VERSION != %d
++    #define EXPECTED_ZITA_RESAMPLER_VERSION %d
++    #if defined(ZITA_RESAMPLER_MAJOR_VERSION) && ZITA_RESAMPLER_MAJOR_VERSION != EXPECTED_ZITA_RESAMPLER_VERSION
+     #error
+     #endif
+-    int main(){ return 0; }
++    int main(){
++    #if !defined(ZITA_RESAMPLER_MAJOR_VERSION)
++    if (zita_resampler_major_version() != 1)
++    throw "error";
++    else
++    #endif
++    return 0;
++    }
+     """ % expected_zita_resampler_version
+     conf.check_cxx(
++        execute=True,
+         fragment=code,
+         lib='zita-resampler',
+         uselib_store='ZITA_RESAMPLER',
