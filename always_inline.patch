@@ -1,0 +1,20 @@
+diff -ur guitarix-0.44.1.orig/src/ladspa/ladspa_guitarix.cpp guitarix-0.44.1/src/ladspa/ladspa_guitarix.cpp
+--- guitarix-0.44.1.orig/src/ladspa/ladspa_guitarix.cpp	2022-05-02 20:38:03.000000000 +0200
++++ guitarix-0.44.1/src/ladspa/ladspa_guitarix.cpp	2023-07-05 00:25:36.613058650 +0200
+@@ -16,7 +16,6 @@
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+  */
+ 
+-#define always_inline inline __attribute__((always_inline))
+ 
+ #include <stdlib.h>
+ #include <string.h>
+@@ -29,6 +28,8 @@
+ #include <jack/jack.h>
+ #include <jack/thread.h>
+ 
++#define always_inline inline __attribute__((always_inline))
++
+ #include "engine.h"
+ 
+ #include "gx_faust_plugins.h"
