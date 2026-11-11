@@ -1,7 +1,7 @@
-diff --git a/wscript b/wscript
+diff --git a/trunk/wscript b/trunk/wscript
 index 066d3f00..bc2c4616 100644
---- a/wscript
-+++ b/wscript
+--- a/trunk/wscript
++++ b/trunk/wscript
 @@ -186,8 +186,13 @@ def check_boost(conf):
      #include <boost/system/error_code.hpp>
      int main() { boost::system::error_code c; }

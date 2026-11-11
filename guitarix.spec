@@ -1,26 +1,31 @@
+
+%define		nam_version	0.3.0
+%define		rtneural_rev	0b0e5d0
+
 Summary:	Linux Rock Guitar Amplifier for Jack Audio Connektion Kit
 Name:		guitarix
-Version:	0.44.1
-Release:	6
+Version:	0.47.0
+Release:	1
 License:	GPL v2+, GPL v3+ (abgate plugin)
 Group:		Applications/Multimedia
-Source0:	http://downloads.sourceforge.net/guitarix/%{name}2-%{version}.tar.xz
-# Source0-md5:	d1757e08ddc54c4ec07defea6a30ac5b
-Patch0:		zita-resampler-1.10.patch
-Patch1:		gcc13.patch
-Patch2:		always_inline.patch
-Patch3:		boost-1.90.patch
-Patch4:		waf.patch
+Source0:	https://github.com/brummer10/guitarix/archive/v%{version}/%{name}2-%{version}.tar.gz
+# Source0-md5:	4734f34588f96d4d8df2220c5b305e55
+Source1:	https://github.com/sdatkinson/NeuralAmpModelerCore/archive/v%{nam_version}/NeuralAmpModelerCore-%{nam_version}.tar.gz
+# Source1-md5:	658bb0ee3412387f2fc1e4f95e6a4bc7
+Source2:	https://github.com/jatinchowdhury18/RTNeural/archive/%{rtneural_rev}/RTNeural-%{rtneural_rev}.tar.gz
+# Source2-md5:	5778d0fa8242d4d16f8626e67c65c295
+Patch0:		boost-1.90.patch
 URL:		https://guitarix.org/
 BuildRequires:	avahi-gobject-devel
 BuildRequires:	bluez-libs-devel
 BuildRequires:	boost-devel >= 1.42
 BuildRequires:	cairo-devel
 BuildRequires:	curl-devel
-BuildRequires:	eigen3
-BuildRequires:	faust
+BuildRequires:	eigen3 >= 5.0.0
+BuildRequires:	faust >= 2.79.3
 BuildRequires:	fftw3-devel >= 3.1.2
 BuildRequires:	fftw3-single-devel
+BuildRequires:	fonts-TTF-Roboto
 BuildRequires:	gettext-tools
 BuildRequires:	glib2-devel
 BuildRequires:	glibmm-devel >= 2.24.0
@@ -58,40 +63,41 @@ use the feedback and feedforward sliders.
 
 
 %prep
-%setup -q
+%setup -q -a1 -a2
 %patch -P0 -p1
-%patch -P1 -p1
-%patch -P2 -p1
-%patch -P3 -p1
-%patch -P4 -p1
+
+%{__mv} NeuralAmpModelerCore-%{nam_version}/* trunk/src/NAM/NeuralAmpModelerCore/
+%{__mv} RTNeural-%{rtneural_rev}*/* trunk/src/RTNeural/RTNeural/
 
 %build
+cd trunk
 CC="%{__cc}" \
 CXX="%{__cxx}" \
-CFLAGS="%{rpmcflags}" \
-CXXFLAGS="%{rpmcxxflags}" \
+CFLAGS="%{rpmcflags} -I/usr/include/eigen3" \
+CXXFLAGS="%{rpmcxxflags} -std=c++17 -I/usr/include/eigen3" \
 LDFLAGS="%{rpmldflags}" \
 ./waf configure \
 	--cxxflags-release="-DNDEBUG" \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
-	--ladspadir=%{_libdir}/ladspa \
 	--mod-lv2 \
-	--ladspa \
+	--faust \
 %ifarch %{ix86}
 	--disable-sse \
 %endif
-	--new-ladspa
 
-./waf build
+./waf build \
+	--verbose
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
+cd trunk
 ./waf install \
 	--destdir=$RPM_BUILD_ROOT
+cd -
 
-rm -f $RPM_BUILD_ROOT%{_libdir}/*.so
+%{__rm} -f $RPM_BUILD_ROOT%{_libdir}/*.so
 
 %find_lang %{name}
 
@@ -103,14 +109,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc changelog README*
+%doc trunk/changelog README.md
 %attr(755,root,root) %{_bindir}/guitarix
 %{_libdir}/libgxw.so.0.*
 %ghost %{_libdir}/libgxw.so.0
 %{_libdir}/libgxwmm.so.0.*
 %ghost %{_libdir}/libgxwmm.so.0
-%{_libdir}/ladspa/*.so
-%{_datadir}/ladspa/rdf/*.rdf
 %dir %{_libdir}/lv2/gx*
 %{_libdir}/lv2/gx*/*.so
 %{_libdir}/lv2/gx*/*.ttl
