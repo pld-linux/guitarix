@@ -1,7 +1,7 @@
 Summary:	Linux Rock Guitar Amplifier for Jack Audio Connektion Kit
 Name:		guitarix
 Version:	0.44.1
-Release:	5
+Release:	6
 License:	GPL v2+, GPL v3+ (abgate plugin)
 Group:		Applications/Multimedia
 Source0:	http://downloads.sourceforge.net/guitarix/%{name}2-%{version}.tar.xz
@@ -9,6 +9,8 @@ Source0:	http://downloads.sourceforge.net/guitarix/%{name}2-%{version}.tar.xz
 Patch0:		zita-resampler-1.10.patch
 Patch1:		gcc13.patch
 Patch2:		always_inline.patch
+Patch3:		boost-1.90.patch
+Patch4:		waf.patch
 URL:		https://guitarix.org/
 BuildRequires:	avahi-gobject-devel
 BuildRequires:	bluez-libs-devel
@@ -38,8 +40,8 @@ BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xz
 BuildRequires:	zita-convolver-devel >= 4.0.0
 BuildRequires:	zita-resampler-devel
-Requires:	ladspa
 Requires:	fonts-TTF-Roboto
+Requires:	ladspa
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_noautoprovfiles	%{_libdir}/(ladspa|lv2)
@@ -60,6 +62,8 @@ use the feedback and feedforward sliders.
 %patch -P0 -p1
 %patch -P1 -p1
 %patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
 
 %build
 CC="%{__cc}" \
@@ -101,14 +105,14 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc changelog README*
 %attr(755,root,root) %{_bindir}/guitarix
-%attr(755,root,root) %{_libdir}/libgxw.so.0.*
-%attr(755,root,root) %ghost %{_libdir}/libgxw.so.0
-%attr(755,root,root) %{_libdir}/libgxwmm.so.0.*
-%attr(755,root,root) %ghost %{_libdir}/libgxwmm.so.0
-%attr(755,root,root) %{_libdir}/ladspa/*.so
+%{_libdir}/libgxw.so.0.*
+%ghost %{_libdir}/libgxw.so.0
+%{_libdir}/libgxwmm.so.0.*
+%ghost %{_libdir}/libgxwmm.so.0
+%{_libdir}/ladspa/*.so
 %{_datadir}/ladspa/rdf/*.rdf
 %dir %{_libdir}/lv2/gx*
-%attr(755,root,root) %{_libdir}/lv2/gx*/*.so
+%{_libdir}/lv2/gx*/*.so
 %{_libdir}/lv2/gx*/*.ttl
 %{_libdir}/lv2/gx*/modgui
 %{_desktopdir}/guitarix.desktop
